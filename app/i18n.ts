@@ -69,7 +69,7 @@ export const homeCopy = {
     aboutTitle: "你好，我是 Mozelle。",
     aboutBody: "这个博客不是一份完成的说明书，而是一张持续生长的地图：保存走过的弯路，也标记下一次想抵达的地方。",
     continueReading: "继续阅读",
-    tagline: "在旅途与源石之间，持续记录。",
+    tagline: "把所见、所想与所爱，收进一页页未完的档案。",
     backToTop: "返回顶部",
     labNotes: [
       ["内存超频", "频率、主次时序、训练与稳定性测试记录"],
@@ -123,7 +123,7 @@ export const homeCopy = {
     aboutTitle: "Hello, I’m Mozelle.",
     aboutBody: "This blog is not a finished manual. It is a map that keeps growing: preserving the detours behind me and marking where I want to go next.",
     continueReading: "Continue Reading",
-    tagline: "Recording the journey between travel and Originium.",
+    tagline: "An unfinished archive of what I see, think, and love.",
     backToTop: "Back to Top",
     labNotes: [
       ["Memory Overclocking", "Frequency, timings, memory training, and stability test logs"],

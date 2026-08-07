@@ -44,7 +44,7 @@ type PublicSettings = {
 
 const fallbackSettings: PublicSettings = {
   siteTitle: "Mozelle Archive",
-  tagline: "在旅途与源石之间，持续记录。",
+  tagline: "把所见、所想与所爱，收进一页页未完的档案。",
   bio: "电子专业学生，记录硬件、超频、游戏、Cosplay 与二次元世界。",
 };
 
