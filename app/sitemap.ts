@@ -13,11 +13,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "weekly",
       priority: 1,
     },
-    ...articles.filter((article) => article.contentType !== "collection").map((article) => ({
-      url: `https://www.mozelle.top/articles/${encodeURIComponent(article.slug ?? article.id)}`,
+    ...articles.map((article) => ({
+      url: `https://www.mozelle.top/${article.contentType === "collection" ? "collections" : "articles"}/${encodeURIComponent(article.slug ?? article.id)}`,
       lastModified: article.date.replaceAll(".", "-"),
       changeFrequency: "monthly" as const,
-      priority: 0.75,
+      priority: article.contentType === "collection" ? 0.65 : 0.75,
     })),
   ];
 }

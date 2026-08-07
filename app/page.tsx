@@ -1704,7 +1704,7 @@ export default function Home() {
         description: localized.summary,
         href:
           contentType === "collection"
-            ? "#collection"
+            ? `/collections/${encodeURIComponent(routeKey)}`
             : `/articles/${encodeURIComponent(routeKey)}`,
         keywords: [
           localized.title,
@@ -2676,6 +2676,7 @@ export default function Home() {
         <div className="collection-grid" data-reveal="up">
           {collectionArticles.map((sourceArticle, index) => {
             const article = localizeArticle(sourceArticle, language);
+            const routeKey = articleRouteKey(article);
             const images = articlePreviewImages(article);
             const visualClass = collectionVisuals[index % collectionVisuals.length];
             return (
@@ -2707,6 +2708,14 @@ export default function Home() {
                   <span data-lang-token>{article.code} / {article.tags[0] ?? "ARCHIVE"}</span>
                   <h3 data-lang-token>{article.title}</h3>
                   <p data-lang-token>{article.summary}</p>
+                  <a
+                    className="collection-entry-link"
+                    href={`/collections/${encodeURIComponent(routeKey)}`}
+                    aria-label={`${language === "zh" ? "查看收藏记录" : "Open collection"}: ${article.title}`}
+                  >
+                    <span data-lang-token>{language === "zh" ? "查看记录" : "OPEN RECORD"}</span>
+                    <span aria-hidden="true">↗</span>
+                  </a>
                 </div>
               </article>
             );
