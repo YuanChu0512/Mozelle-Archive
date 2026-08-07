@@ -95,6 +95,10 @@ function protectMarkdown(text) {
     `${start}${protect(url)}${end}`
   ));
   protectedText = protectedText.replace(/https?:\/\/[^\s)]+/g, protect);
+  protectedText = protectedText.replace(
+    /^(\s*(?:#{1,6}\s+|>\s*|[-*+]\s+|\d+[.)]\s+))/gm,
+    protect,
+  );
   return { protectedText, tokens };
 }
 
@@ -111,6 +115,21 @@ function restoreMarkdown(text, tokens) {
   return restored;
 }
 
+function markdownChunks(block, maximumLength = 3_500) {
+  const parts = block.split(/(\n{2,})/);
+  const chunks = [];
+  let current = "";
+  for (const part of parts) {
+    if (current && current.length + part.length > maximumLength) {
+      chunks.push(current);
+      current = "";
+    }
+    current += part;
+  }
+  if (current) chunks.push(current);
+  return chunks;
+}
+
 async function translateMarkdown(markdown, translateText) {
   const blocks = markdown.split(/(```[\s\S]*?```)/g);
   const translated = [];
@@ -121,22 +140,18 @@ async function translateMarkdown(markdown, translateText) {
       continue;
     }
 
-    const lines = block.split("\n");
-    for (const line of lines) {
-      if (!CJK_PATTERN.test(line)) {
-        translated.push(line);
+    for (const chunk of markdownChunks(block)) {
+      if (!CJK_PATTERN.test(chunk)) {
+        translated.push(chunk);
         continue;
       }
-      const match = line.match(/^(\s*(?:#{1,6}\s+|>\s*|[-*+]\s+|\d+[.)]\s+)?)([\s\S]*)$/);
-      const prefix = match?.[1] || "";
-      const content = match?.[2] || line;
-      const { protectedText, tokens } = protectMarkdown(content);
+      const { protectedText, tokens } = protectMarkdown(chunk);
       const result = await translateText(protectedText);
-      translated.push(`${prefix}${restoreMarkdown(result, tokens)}`);
+      translated.push(restoreMarkdown(result, tokens));
     }
   }
 
-  return translated.join("\n");
+  return translated.join("");
 }
 
 function hasUsefulEnglish(translation) {

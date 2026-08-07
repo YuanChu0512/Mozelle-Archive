@@ -36,13 +36,14 @@ test("existing English is preserved when the Chinese source is unchanged", async
 
 test("automatic translation preserves fenced code, inline code, URLs, and media order", async () => {
   const result = await buildAutomaticEnglish(post, {}, {
-    translateText: async (text) => `EN:${text}`,
+    translateText: async (text) => text.replace(/[\u3400-\u9fff\uf900-\ufaff]+/g, "translated"),
   });
   const english = result.translations.en;
   assert.equal(result.status, "generated");
   assert.match(english.contentMarkdown, /```js\nconst label = '中文不翻译';\n```/);
   assert.match(english.contentMarkdown, /`tREFI`/);
   assert.match(english.contentMarkdown, /https:\/\/example\.com\/doc/);
+  assert.match(english.contentMarkdown, /^## /m);
   assert.equal(english.gallery[0].src, "/uploads/a.webp");
   assert.equal(english.tags.length, 2);
 });
