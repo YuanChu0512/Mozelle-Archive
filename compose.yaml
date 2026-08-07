@@ -26,6 +26,8 @@ services:
     depends_on:
       db:
         condition: service_healthy
+      translate:
+        condition: service_healthy
     environment:
       API_PORT: 8788
       PGHOST: db
@@ -39,12 +41,33 @@ services:
       GITHUB_CLIENT_ID: ${GITHUB_CLIENT_ID}
       GITHUB_CLIENT_SECRET: ${GITHUB_CLIENT_SECRET}
       ADMIN_GITHUB_ID: ${ADMIN_GITHUB_ID}
+      TRANSLATION_ORIGIN: http://translate:5000
       UPLOAD_DIR: /data/uploads
     volumes:
       - uploads_data:/data/uploads
     read_only: true
     tmpfs:
       - /tmp:size=64m,mode=1777
+    security_opt:
+      - no-new-privileges:true
+
+  translate:
+    image: libretranslate/libretranslate:v1.9.4
+    restart: unless-stopped
+    environment:
+      LT_LOAD_ONLY: zh,en
+      LT_DISABLE_WEB_UI: "true"
+      LT_UPDATE_MODELS: "true"
+    volumes:
+      - translate_models:/home/libretranslate/.local
+    healthcheck:
+      test: ["CMD", "./venv/bin/python", "scripts/healthcheck.py"]
+      interval: 30s
+      timeout: 10s
+      start_period: 5m
+      retries: 10
+    mem_limit: 1200m
+    cpus: 1.5
     security_opt:
       - no-new-privileges:true
 
@@ -90,6 +113,8 @@ volumes:
     name: mozelle_postgres_data
   uploads_data:
     name: mozelle_uploads_data
+  translate_models:
+    name: mozelle_translate_models
   caddy_data:
     name: mozelle_caddy_data
   caddy_config:

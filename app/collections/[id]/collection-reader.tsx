@@ -113,7 +113,7 @@ export default function CollectionReader({ collectionId }: { collectionId: strin
           <span className="brand-mark" aria-hidden="true"><span /></span>
           <span className="brand-copy">
             <strong>Mozelle Archive</strong>
-            <small>// COLLECTION</small>
+            <small>{"// COLLECTION"}</small>
           </span>
         </a>
         <span className="article-header-code">{displayedCollection?.code ?? "COLLECTION / LOADING"}</span>

@@ -25,12 +25,18 @@ import {
   normalizeVisitorIp,
 } from "./analytics.mjs";
 import { sanitizeImageMetadata } from "./image-sanitizer.mjs";
+import {
+  buildAutomaticEnglish,
+  createLibreTranslateClient,
+  translationSourceHash,
+} from "./translation.mjs";
 
 const serverDirectory = path.dirname(fileURLToPath(import.meta.url));
 const uploadDirectory = path.resolve(process.env.UPLOAD_DIR || "/data/uploads");
 const publicOrigin = (process.env.PUBLIC_ORIGIN || "http://localhost").replace(/\/$/, "");
 const port = Number(process.env.API_PORT || 8788);
 const secureCookies = publicOrigin.startsWith("https://");
+const translateText = createLibreTranslateClient();
 
 const requiredEnvironment = [
   "SESSION_SECRET",
@@ -380,6 +386,12 @@ function normalizeTranslations(value) {
   if (Object.hasOwn(source, "sources")) {
     en.sources = normalizeTranslationSources(source.sources);
   }
+  if (source.auto && typeof source.auto === "object" && !Array.isArray(source.auto)) {
+    const sourceHash = cleanText(source.auto.sourceHash, 64);
+    const generatedAt = cleanText(source.auto.generatedAt, 40);
+    const engine = cleanText(source.auto.engine, 80);
+    if (sourceHash) en.auto = { sourceHash, generatedAt, engine };
+  }
   return Object.keys(en).length ? { en } : {};
 }
 
@@ -503,7 +515,9 @@ function mapPublicPost(row) {
   const translations = post.translations?.en
     ? {
         en: {
-          ...post.translations.en,
+          ...Object.fromEntries(
+            Object.entries(post.translations.en).filter(([key]) => key !== "auto"),
+          ),
           ...(post.translations.en.contentMarkdown
             ? {
                 content: markdownParagraphs(post.translations.en.contentMarkdown),
@@ -1041,6 +1055,17 @@ app.post(
     } catch (error) {
       return reply.code(400).send({ error: "INVALID_POST", message: error.message });
     }
+    let automaticEnglish;
+    try {
+      automaticEnglish = await buildAutomaticEnglish(post, {}, { translateText });
+      post.translations = automaticEnglish.translations;
+    } catch (error) {
+      request.log.error({ err: error }, "automatic English translation failed");
+      return reply.code(502).send({
+        error: "TRANSLATION_FAILED",
+        message: "英文版自动生成失败，请稍后重试。中文内容尚未保存。",
+      });
+    }
     const id = randomUUID();
     try {
       const { rows } = await pool.query(
@@ -1060,7 +1085,10 @@ app.post(
         "INSERT INTO revisions (id, post_id, snapshot) VALUES ($1, $2, $3::jsonb)",
         [randomUUID(), id, JSON.stringify(mapPost(rows[0]))],
       );
-      return reply.code(201).send({ post: mapPost(rows[0]) });
+      return reply.code(201).send({
+        post: mapPost(rows[0]),
+        translation: { status: automaticEnglish.status },
+      });
     } catch (error) {
       if (error.code === "23505") {
         return reply.code(409).send({ error: "SLUG_EXISTS", message: "内容链接已经被使用。" });
@@ -1080,6 +1108,25 @@ app.put(
     } catch (error) {
       return reply.code(400).send({ error: "INVALID_POST", message: error.message });
     }
+    const existing = await pool.query("SELECT * FROM posts WHERE id = $1", [request.params.id]);
+    if (!existing.rows.length) {
+      return reply.code(404).send({ error: "NOT_FOUND", message: "内容不存在。" });
+    }
+    let automaticEnglish;
+    try {
+      const currentPost = mapPost(existing.rows[0]);
+      automaticEnglish = await buildAutomaticEnglish(post, currentPost.translations, {
+        translateText,
+        sourceUnchanged: translationSourceHash(currentPost) === translationSourceHash(post),
+      });
+      post.translations = automaticEnglish.translations;
+    } catch (error) {
+      request.log.error({ err: error }, "automatic English translation failed");
+      return reply.code(502).send({
+        error: "TRANSLATION_FAILED",
+        message: "英文版自动生成失败，请稍后重试。中文内容尚未保存。",
+      });
+    }
     const client = await pool.connect();
     try {
       await client.query("BEGIN");
@@ -1087,11 +1134,6 @@ app.put(
       if (!current.rows.length) {
         await client.query("ROLLBACK");
         return reply.code(404).send({ error: "NOT_FOUND", message: "内容不存在。" });
-      }
-      if (!Object.hasOwn(request.body || {}, "translations")) {
-        // Older console builds do not send this field. Preserve existing English
-        // content until that client explicitly submits a translations payload.
-        post.translations = normalizeTranslations(current.rows[0].translations);
       }
       await client.query(
         "INSERT INTO revisions (id, post_id, snapshot) VALUES ($1, $2, $3::jsonb)",
@@ -1112,7 +1154,10 @@ app.put(
         ],
       );
       await client.query("COMMIT");
-      return { post: mapPost(result.rows[0]) };
+      return {
+        post: mapPost(result.rows[0]),
+        translation: { status: automaticEnglish.status },
+      };
     } catch (error) {
       await client.query("ROLLBACK");
       if (error.code === "23505") {

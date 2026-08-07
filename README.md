@@ -7,11 +7,11 @@
 ## 主要功能
 
 - 白昼与夜间双主题，带有从切换按钮向全屏扩散的过渡动画
-- 中英双语界面，文字通过分解、溃散和重组完成语言切换
+- 中英双语界面，文字通过分解、溃散和重组完成语言切换；后台保存中文时自动生成英文内容
 - 双主题指针、轻量尾迹、全局点击反馈和滚动驱动的场景变化
 - 响应式布局，为宽屏、笔记本与移动端分别调整视觉密度和动画强度
 - 独立文章详情页、Markdown 渲染、图片灯箱与正确的媒体显示比例
-- 独立管理后台，支持草稿、发布、定时发布、分类、标签、双语内容和图库管理
+- 独立管理后台，支持草稿、发布、定时发布、分类、标签、自动翻译和图库管理
 - 后台访问统计，展示浏览量、独立 IP、访问趋势、热门页面，以及最近 IP 对应的所在地区与访问路径
 - 文章修订记录、图片元数据清理以及服务端登录限速
 - PostgreSQL 持久化、Docker Compose 编排和 Caddy 自动 HTTPS
@@ -23,6 +23,7 @@
 | 页面与交互 | React 19、Vinext、Vite 8、TypeScript |
 | 服务端 API | Fastify 5、Node.js 22 |
 | 数据与内容 | PostgreSQL 17、Drizzle ORM |
+| 自动翻译 | LibreTranslate、Argos Translate（中英模型，仅保存时运行） |
 | 部署 | Docker Compose、Caddy |
 | 样式与动效 | CSS 动画、Canvas、按需启用的 GPU 合成 |
 
@@ -33,6 +34,7 @@ graph LR
   B --> D[Fastify API]
   D --> E[PostgreSQL]
   D --> F[Uploads]
+  D --> G[LibreTranslate]
 ```
 
 ## 仓库内容边界
@@ -60,7 +62,7 @@ openssl rand -hex 32
 chmod 600 .env
 ```
 
-启动全部服务：
+启动全部服务。首次运行时翻译容器会下载中英模型，因此 API 就绪时间可能比后续启动更长：
 
 ```bash
 docker compose build
@@ -101,7 +103,7 @@ docker compose up -d
 npm ci
 npm run lint
 npm run build
-node --test tests/rendered-html.test.mjs tests/image-sanitizer.test.mjs
+node --test tests/rendered-html.test.mjs tests/image-sanitizer.test.mjs tests/translation.test.mjs
 ```
 
 更完整的服务器配置、备份和故障检查说明见 [VPS 部署文档](docs/VPS_DEPLOYMENT.md)。

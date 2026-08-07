@@ -1,6 +1,6 @@
 # Mozelle Archive VPS 部署说明
 
-本文以一台已绑定公网 IP 的 Linux VPS 为目标。最终结构为：Caddy 负责 HTTPS 与反向代理，Vinext 提供博客页面，Fastify 提供后台 API，PostgreSQL 保存文章，Docker Volume 保存数据库与上传图片。
+本文以一台已绑定公网 IP 的 Linux VPS 为目标。最终结构为：Caddy 负责 HTTPS 与反向代理，Vinext 提供博客页面，Fastify 提供后台 API，PostgreSQL 保存文章，LibreTranslate 在后台保存内容时生成英文版本，Docker Volume 保存数据库、上传图片与翻译模型。
 
 ## 1. 准备域名和服务器
 
@@ -14,7 +14,7 @@ docker --version
 docker compose version
 ```
 
-只有 Caddy 的 80/443 端口会暴露到公网；PostgreSQL、API 和 Web 容器不会直接对公网开放端口。
+只有 Caddy 的 80/443 端口会暴露到公网；PostgreSQL、API、Web 和翻译容器不会直接对公网开放端口。
 
 ## 2. 设置后台密码与可选的 GitHub 备用登录
 
@@ -66,7 +66,7 @@ docker compose up -d
 docker compose ps
 ```
 
-首次启动时 API 会自动创建数据库表并写入四篇示例文章；Caddy 会在域名解析生效后自动申请证书。查看日志：
+首次启动时 API 会自动创建数据库表并写入示例文章；翻译容器会下载中英模型，可能需要几分钟；Caddy 会在域名解析生效后自动申请证书。查看日志：
 
 ```bash
 docker compose logs -f --tail=100
@@ -98,6 +98,8 @@ docker image prune -f
 
 数据库和上传图片位于独立 Docker Volume，重新构建容器不会删除内容。
 
+后台只需编辑中文。保存草稿、定时发布或直接发布时，API 会生成英文标题、摘要、标签、正文和图片说明。中文未发生变化时会沿用已有英文，避免重复翻译。翻译失败时本次保存会取消，中文和英文不会出现版本错位。
+
 ## 6. 备份
 
 创建备份目录：
@@ -117,6 +119,8 @@ docker compose exec -T db sh -c 'pg_dump -U "$POSTGRES_USER" "$POSTGRES_DB"' | g
 ```bash
 docker run --rm -v mozelle_uploads_data:/data:ro -v "$PWD/backups":/backup alpine tar -czf /backup/uploads.tar.gz -C /data .
 ```
+
+翻译模型保存在 `mozelle_translate_models`，重新创建容器不会重新下载。它不包含文章正文，通常无需加入内容备份。
 
 建议把 `backups` 目录定期复制到另一台机器或对象存储。执行 `docker compose down -v` 会删除数据卷，除非已经确认备份可恢复，否则不要使用 `-v`。
 

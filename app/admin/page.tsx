@@ -724,26 +724,32 @@ export default function AdminPage() {
 
     setSaving(true);
     try {
+      const { translations: _ignoredTranslations, ...automaticTranslationPost } = next;
+      void _ignoredTranslations;
       const response = await fetch(
         next.id ? `/api/admin/posts/${encodeURIComponent(next.id)}` : "/api/admin/posts",
         {
           method: next.id ? "PUT" : "POST",
           headers: { "content-type": "application/json" },
-          body: JSON.stringify(next),
+          body: JSON.stringify({ ...automaticTranslationPost, autoTranslate: true }),
         },
       );
-      if (!response.ok) throw new Error((await response.text()) || "保存失败");
-      const payload = (await response.json()) as { post: AdminPost };
-      const responseTranslations = (payload.post as AdminPost & {
-        translations?: { en?: unknown };
-      }).translations;
-      const normalizedPost = normalizeAdminPost(payload.post);
-      const savedPost = responseTranslations?.en
-        ? normalizedPost
-        : { ...normalizedPost, translations: next.translations };
+      const payload = (await response.json().catch(() => null)) as {
+        post?: AdminPost;
+        message?: string;
+        translation?: { status?: "generated" | "preserved" };
+      } | null;
+      if (!response.ok || !payload?.post) {
+        throw new Error(payload?.message || "保存失败，请稍后重试。");
+      }
+      const savedPost = normalizeAdminPost(payload.post);
       setDraft(savedPost);
       setPosts((current) => [savedPost, ...current.filter((post) => post.id !== savedPost.id)]);
-      setNotice(status === "published" ? "内容已发布。" : status === "scheduled" ? "已设置定时发布。" : "草稿已保存。");
+      const action = status === "published" ? "内容已发布" : status === "scheduled" ? "已设置定时发布" : "草稿已保存";
+      const translation = payload.translation?.status === "preserved"
+        ? "英文版保持同步。"
+        : "英文版已自动生成。";
+      setNotice(`${action}，${translation}`);
     } catch (error) {
       setNotice(error instanceof Error ? error.message : "保存失败，请稍后重试。");
     } finally {
@@ -1331,17 +1337,7 @@ export default function AdminPage() {
                   <span>ZH</span>
                   <strong>中文</strong>
                 </button>
-                <button
-                  type="button"
-                  role="tab"
-                  aria-selected={editorLocale === "en"}
-                  className={editorLocale === "en" ? "is-active" : ""}
-                  onClick={() => setEditorLocale("en")}
-                >
-                  <span>EN</span>
-                  <strong>English</strong>
-                </button>
-                <p>标题、摘要、标签、正文和图片说明按语言独立保存；发布设置与图片顺序共用。</p>
+                <p>保存中文后，系统会自动生成英文标题、摘要、标签、正文与图片说明，无需单独维护英文版本。</p>
               </div>
               <div className="editor-layout">
                 <section className="editor-main panel">
