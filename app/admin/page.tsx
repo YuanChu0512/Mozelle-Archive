@@ -97,7 +97,7 @@ type AnalyticsPayload = {
 };
 
 const defaultSettings: SiteSettings = {
-  siteTitle: "Mozelle Journal",
+  siteTitle: "Mozelle Archive",
   tagline: "在旅途与源石之间，持续记录。",
   bio: "电子专业学生，记录硬件、超频、游戏、Cosplay 与二次元世界。",
   defaultCategory: "电子",
@@ -1106,7 +1106,7 @@ export default function AdminPage() {
       <section className="admin-workspace">
         <header className="admin-topbar">
           <div>
-            <span>MOZELLE JOURNAL</span>
+            <span>MOZELLE ARCHIVE</span>
             <strong>{navItems.find((item) => item.id === section)?.label}</strong>
           </div>
           <div className="topbar-actions">

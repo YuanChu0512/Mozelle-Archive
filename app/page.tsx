@@ -43,7 +43,7 @@ type PublicSettings = {
 };
 
 const fallbackSettings: PublicSettings = {
-  siteTitle: "Mozelle Journal",
+  siteTitle: "Mozelle Archive",
   tagline: "在旅途与源石之间，持续记录。",
   bio: "电子专业学生，记录硬件、超频、游戏、Cosplay 与二次元世界。",
 };
@@ -170,7 +170,7 @@ export default function Home() {
   const setSearchVisibility = useCallback((open: boolean) => {
     const root = document.documentElement;
     const transitionDocument = document as ViewTransitionDocument;
-    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const reducedMotion = root.dataset.motion === "lite";
     if (
       reducedMotion ||
       !transitionDocument.startViewTransition ||
@@ -277,9 +277,7 @@ export default function Home() {
     const revealNodes = Array.from(
       document.querySelectorAll<HTMLElement>("[data-reveal]"),
     );
-    const reducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)",
-    ).matches;
+    const reducedMotion = document.documentElement.dataset.motion === "lite";
     const liteMotion =
       reducedMotion || document.documentElement.dataset.motion === "lite";
 
@@ -473,9 +471,7 @@ export default function Home() {
 
   useEffect(() => {
     const root = document.documentElement;
-    const motionQuery = window.matchMedia(
-      "(max-width: 940px), (pointer: coarse), (prefers-reduced-motion: reduce)",
-    );
+    const motionQuery = window.matchMedia("(max-width: 940px), (pointer: coarse)");
     const deviceNavigator = navigator as Navigator & {
       deviceMemory?: number;
       connection?: { saveData?: boolean };
@@ -539,8 +535,7 @@ export default function Home() {
     if (
       !visual ||
       document.documentElement.dataset.motion === "lite" ||
-      window.matchMedia("(pointer: coarse), (prefers-reduced-motion: reduce)")
-        .matches
+      window.matchMedia("(pointer: coarse)").matches
     ) {
       return;
     }
@@ -740,9 +735,7 @@ export default function Home() {
     };
 
     const coarsePointer = window.matchMedia("(pointer: coarse)").matches;
-    const prefersReducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)",
-    ).matches;
+    const prefersReducedMotion = document.documentElement.dataset.motion === "lite";
     const lowPower =
       document.documentElement.dataset.motion === "lite" || coarsePointer;
     const particles: RhodesParticle[] = [];
@@ -1019,7 +1012,7 @@ export default function Home() {
       lastActivityAt = performance.now();
     };
     const updateAnimationState = () => {
-      if (document.hidden || !inView || prefersReducedMotion) {
+      if (document.hidden || !inView) {
         if (frame) window.cancelAnimationFrame(frame);
         frame = 0;
       } else if (!frame) {
@@ -1106,9 +1099,7 @@ export default function Home() {
     };
 
     const coarsePointer = window.matchMedia("(pointer: coarse)").matches;
-    const prefersReducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)",
-    ).matches;
+    const prefersReducedMotion = document.documentElement.dataset.motion === "lite";
     const lowPower =
       document.documentElement.dataset.motion === "lite" || coarsePointer;
     const deviceNavigator = navigator as Navigator & { deviceMemory?: number };
@@ -1762,8 +1753,7 @@ export default function Home() {
   useEffect(() => {
     if (
       document.documentElement.dataset.motion === "lite" ||
-      window.matchMedia("(pointer: coarse), (prefers-reduced-motion: reduce)")
-        .matches
+      window.matchMedia("(pointer: coarse)").matches
     ) {
       return;
     }
@@ -1888,9 +1878,7 @@ export default function Home() {
 
     event.preventDefault();
     setMenuOpen(false);
-    const reducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)",
-    ).matches;
+    const reducedMotion = document.documentElement.dataset.motion === "lite";
     const liteMotion =
       reducedMotion || document.documentElement.dataset.motion === "lite";
 
@@ -1941,9 +1929,7 @@ export default function Home() {
     if (entry.href.startsWith("#")) {
       const target = document.getElementById(entry.href.slice(1));
       if (!target) return;
-      const reducedMotion = window.matchMedia(
-        "(prefers-reduced-motion: reduce)",
-      ).matches;
+      const reducedMotion = document.documentElement.dataset.motion === "lite";
       window.requestAnimationFrame(() => {
         target.scrollIntoView({
           behavior: reducedMotion ? "auto" : "smooth",

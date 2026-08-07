@@ -13,8 +13,7 @@ export function LiquidGlassLens() {
 export function useLiquidGlassTracking() {
   useEffect(() => {
     const precisionPointer = window.matchMedia("(hover: hover) and (pointer: fine)");
-    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-    if (!precisionPointer.matches || reducedMotion.matches) return;
+    if (!precisionPointer.matches) return;
 
     let activeSurface: HTMLElement | null = null;
     let activeBounds: DOMRect | null = null;

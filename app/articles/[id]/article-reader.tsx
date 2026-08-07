@@ -199,7 +199,7 @@ export default function ArticleReader({ articleId }: { articleId: string }) {
         <a className="brand" href="/" aria-label={copy.homeLabel}>
           <span className="brand-mark" aria-hidden="true"><span /></span>
           <span className="brand-copy">
-            <strong>Mozelle Journal</strong>
+            <strong>Mozelle Archive</strong>
             <small>{`// ${archiveType}`}</small>
           </span>
         </a>

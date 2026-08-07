@@ -1,4 +1,4 @@
-# Mozelle Journal VPS 部署说明
+# Mozelle Archive VPS 部署说明
 
 本文以一台已绑定公网 IP 的 Linux VPS 为目标。最终结构为：Caddy 负责 HTTPS 与反向代理，Vinext 提供博客页面，Fastify 提供后台 API，PostgreSQL 保存文章，Docker Volume 保存数据库与上传图片。
 
@@ -25,7 +25,7 @@ GitHub OAuth 现在只是备用入口，不配置也不影响密码登录。需�
 1. 登录作为管理员的 GitHub 账号。
 2. 进入 `Settings → Developer settings → OAuth Apps → New OAuth App`。
 3. 填写：
-   - Application name：`Mozelle Journal Admin`
+   - Application name：`Mozelle Archive Admin`
    - Homepage URL：`https://你的域名`
    - Authorization callback URL：`https://你的域名/api/auth/github/callback`
 4. 创建后复制 `Client ID`，再生成一个 `Client secret`。密钥只放进 VPS 的 `.env`。

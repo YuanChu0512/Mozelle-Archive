@@ -475,7 +475,7 @@ export function useLanguageSwitcher() {
     const next: Language = language === "zh" ? "en" : "zh";
     const root = document.documentElement;
     const rect = event.currentTarget.getBoundingClientRect();
-    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const reducedMotion = root.dataset.motion === "lite";
     const liteMotion = root.dataset.motion === "lite" || window.innerWidth <= 720;
     root.style.setProperty("--language-x", `${rect.left + rect.width / 2}px`);
     root.style.setProperty("--language-y", `${rect.top + rect.height / 2}px`);

@@ -14,7 +14,7 @@ export async function generateMetadata({ params }: CollectionPageProps): Promise
   const matched = candidates.find((item) => item.id === id || item.slug === id);
   const collection = matched?.contentType === "collection" ? matched : undefined;
   const title = collection?.title ?? "次元收藏";
-  const description = collection?.summary ?? "Mozelle Journal 次元收藏记录。";
+  const description = collection?.summary ?? "Mozelle Archive 次元收藏记录。";
   const canonicalKey = collection?.slug ?? collection?.id ?? id;
   const canonicalUrl = `/collections/${encodeURIComponent(canonicalKey)}`;
 

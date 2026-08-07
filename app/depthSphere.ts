@@ -163,9 +163,7 @@ export function mountDepthSphere({ visual, canvas }: DepthSphereOptions) {
   if (!context) return () => undefined;
 
   const coarsePointer = window.matchMedia("(pointer: coarse)").matches;
-  const prefersReducedMotion = window.matchMedia(
-    "(prefers-reduced-motion: reduce)",
-  ).matches;
+  const prefersReducedMotion = document.documentElement.dataset.motion === "lite";
   const lowPower =
     document.documentElement.dataset.motion === "lite" || coarsePointer;
   const geometry = buildIcosahedron(!lowPower && !prefersReducedMotion);

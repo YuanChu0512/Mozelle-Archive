@@ -904,7 +904,7 @@ app.get("/api/posts", async (_request, reply) => {
 
 app.get("/api/settings", async (_request, reply) => {
   const defaults = {
-    siteTitle: "Mozelle Journal",
+    siteTitle: "Mozelle Archive",
     tagline: "在旅途与源石之间，持续记录。",
     bio: "电子专业学生，记录硬件、超频、游戏、Cosplay 与二次元世界。",
     defaultCategory: "电子",

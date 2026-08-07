@@ -5102,36 +5102,36 @@ html[data-motion="lite"] .magic-directional-field {
   display: none;
 }
 
-@media (min-width: 941px) and (prefers-reduced-motion: no-preference) {
-  .site-header {
+@media (min-width: 941px) {
+  html[data-motion="full"] .site-header {
     animation: premium-header-enter 560ms cubic-bezier(0.16, 0.82, 0.18, 1) backwards;
   }
 
-  .hero-kicker {
+  html[data-motion="full"] .hero-kicker {
     animation: premium-copy-enter 520ms 40ms cubic-bezier(0.16, 0.82, 0.18, 1) backwards;
   }
 
-  .hero h1 {
+  html[data-motion="full"] .hero h1 {
     animation: premium-copy-enter 700ms 80ms cubic-bezier(0.16, 0.82, 0.18, 1) backwards;
   }
 
-  .hero-description {
+  html[data-motion="full"] .hero-description {
     animation: premium-copy-enter 600ms 110ms cubic-bezier(0.16, 0.82, 0.18, 1) backwards;
   }
 
-  .hero-actions {
+  html[data-motion="full"] .hero-actions {
     animation: premium-copy-enter 600ms 140ms cubic-bezier(0.16, 0.82, 0.18, 1) backwards;
   }
 
-  .interest-tags {
+  html[data-motion="full"] .interest-tags {
     animation: premium-copy-enter 580ms 170ms cubic-bezier(0.16, 0.82, 0.18, 1) backwards;
   }
 
-  .hero-visual {
+  html[data-motion="full"] .hero-visual {
     animation: premium-visual-enter 760ms 50ms cubic-bezier(0.16, 0.82, 0.18, 1) backwards;
   }
 
-  .latest-card {
+  html[data-motion="full"] .latest-card {
     animation: premium-copy-enter 620ms 210ms cubic-bezier(0.16, 0.82, 0.18, 1) backwards;
   }
 }
@@ -7159,71 +7159,71 @@ html.is-spotlight-transitioning .spotlight-panel {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
-  *,
-  *::before,
-  *::after {
+  html[data-motion="lite"] { scroll-behavior: auto; }
+  html[data-motion="lite"] *,
+  html[data-motion="lite"] *::before,
+  html[data-motion="lite"] *::after {
     scroll-behavior: auto !important;
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 180ms !important;
   }
 
-  .theme-transition .transition-sweep,
-  .theme-transition .transition-ring {
+  html[data-motion="lite"] .theme-transition .transition-sweep,
+  html[data-motion="lite"] .theme-transition .transition-ring {
     display: none;
   }
 
-  .language-reassembly,
-  .language-token-layer,
-  .language-canvas-layer {
+  html[data-motion="lite"] .language-reassembly,
+  html[data-motion="lite"] .language-token-layer,
+  html[data-motion="lite"] .language-canvas-layer {
     display: none;
   }
 
-  [data-lang-token][data-lang-phase] {
+  html[data-motion="lite"] [data-lang-token][data-lang-phase] {
     opacity: 1 !important;
   }
 
-  .section-jump-transition {
+  html[data-motion="lite"] .section-jump-transition {
     display: none;
   }
 
-  .latest-card.is-navigation-source,
-  .article-card.is-navigation-source .article-visual,
-  .article-reader-cover,
-  .article-reader-visual,
-  .latest-card.is-navigation-source strong,
-  .article-card.is-navigation-source h3,
-  .article-reader-hero h1 {
+  html[data-motion="lite"] .latest-card.is-navigation-source,
+  html[data-motion="lite"] .article-card.is-navigation-source .article-visual,
+  html[data-motion="lite"] .article-reader-cover,
+  html[data-motion="lite"] .article-reader-visual,
+  html[data-motion="lite"] .latest-card.is-navigation-source strong,
+  html[data-motion="lite"] .article-card.is-navigation-source h3,
+  html[data-motion="lite"] .article-reader-hero h1 {
     view-transition-name: none;
   }
 
-  .liquid-glass-glow {
+  html[data-motion="lite"] .liquid-glass-glow {
     display: none;
   }
 
-  .dimension-scroll-scene,
-  .dimension-scroll-scene * {
+  html[data-motion="lite"] .dimension-scroll-scene,
+  html[data-motion="lite"] .dimension-scroll-scene * {
     animation: none !important;
     translate: none !important;
     rotate: none !important;
   }
 
-  [data-reveal] {
+  html[data-motion="lite"] [data-reveal] {
     opacity: 1 !important;
     transform: none !important;
     transition: none !important;
   }
 
-  .card-specular,
-  .global-ambient-effects,
-  .dimension-event-layer {
+  html[data-motion="lite"] .card-specular,
+  html[data-motion="lite"] .global-ambient-effects,
+  html[data-motion="lite"] .dimension-event-layer {
     display: none;
   }
 
-  .ambient-grid,
-  .hero-copy,
-  [data-tilt-card] {
+  html[data-motion="lite"] .ambient-grid,
+  html[data-motion="lite"] .hero-copy,
+  html[data-motion="lite"] [data-tilt-card] {
     transform: none !important;
     will-change: auto !important;
   }

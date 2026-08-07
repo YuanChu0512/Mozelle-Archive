@@ -55,9 +55,7 @@ export function useThemeTransition(
 
     const nextTheme: Theme = theme === "day" ? "night" : "day";
     const root = document.documentElement;
-    const reducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)",
-    ).matches;
+    const reducedMotion = root.dataset.motion === "lite";
     const liteMotion =
       reducedMotion
       || root.dataset.motion === "lite"

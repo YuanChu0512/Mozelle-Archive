@@ -16,11 +16,11 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.mozelle.top"),
   title: {
-    default: "Mozelle Journal｜电子、超频与二次元 / Electronics, Overclocking & ACG",
-    template: "%s｜Mozelle Journal",
+    default: "Mozelle Archive｜电子、超频与二次元 / Electronics, Overclocking & ACG",
+    template: "%s｜Mozelle Archive",
   },
   description:
-    "电子专业学生的双语个人博客，记录硬件、超频、游戏、Cosplay 与二次元世界。 A bilingual journal about electronics, overclocking, games, cosplay, and ACG culture.",
+    "电子专业学生的双语个人博客，记录硬件、超频、游戏、Cosplay 与二次元世界。 A bilingual archive of electronics, overclocking, games, cosplay, and ACG culture.",
   alternates: {
     canonical: "/",
   },
@@ -29,16 +29,16 @@ export const metadata: Metadata = {
     locale: "zh_CN",
     alternateLocale: ["en_US"],
     url: "/",
-    siteName: "Mozelle Journal",
-    title: "Mozelle Journal｜电子、超频与二次元 / Electronics, Overclocking & ACG",
+    siteName: "Mozelle Archive",
+    title: "Mozelle Archive｜电子、超频与二次元 / Electronics, Overclocking & ACG",
     description:
-      "电子专业学生的双语个人博客，记录硬件、超频、游戏、Cosplay 与二次元世界。 A bilingual journal about electronics, overclocking, games, cosplay, and ACG culture.",
+      "电子专业学生的双语个人博客，记录硬件、超频、游戏、Cosplay 与二次元世界。 A bilingual archive of electronics, overclocking, games, cosplay, and ACG culture.",
   },
   twitter: {
     card: "summary",
-    title: "Mozelle Journal｜电子、超频与二次元 / Electronics, Overclocking & ACG",
+    title: "Mozelle Archive｜电子、超频与二次元 / Electronics, Overclocking & ACG",
     description:
-      "电子专业学生的双语个人博客，记录硬件、超频、游戏、Cosplay 与二次元世界。 A bilingual journal about electronics, overclocking, games, cosplay, and ACG culture.",
+      "电子专业学生的双语个人博客，记录硬件、超频、游戏、Cosplay 与二次元世界。 A bilingual archive of electronics, overclocking, games, cosplay, and ACG culture.",
   },
   robots: {
     index: true,

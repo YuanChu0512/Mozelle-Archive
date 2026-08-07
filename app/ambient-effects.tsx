@@ -24,7 +24,6 @@ export default function AmbientEffects() {
     if (!cursor || !trail || !burst) return;
 
     const pointerQuery = window.matchMedia("(min-width: 941px) and (pointer: fine)");
-    const motionQuery = window.matchMedia("(prefers-reduced-motion: no-preference)");
     const target = { x: -100, y: -100 };
     let frame = 0;
     let burstTimer = 0;
@@ -36,7 +35,6 @@ export default function AmbientEffects() {
 
     const canAnimate = () =>
       pointerQuery.matches &&
-      motionQuery.matches &&
       document.documentElement.dataset.motion !== "lite";
 
     const paintCursor = () => {
@@ -149,7 +147,6 @@ export default function AmbientEffects() {
     window.addEventListener("pointerdown", triggerBurst, { passive: true });
     window.addEventListener("blur", disableCursor);
     pointerQuery.addEventListener("change", handlePreferenceChange);
-    motionQuery.addEventListener("change", handlePreferenceChange);
 
     return () => {
       disableCursor();
@@ -161,7 +158,6 @@ export default function AmbientEffects() {
       window.removeEventListener("pointerdown", triggerBurst);
       window.removeEventListener("blur", disableCursor);
       pointerQuery.removeEventListener("change", handlePreferenceChange);
-      motionQuery.removeEventListener("change", handlePreferenceChange);
     };
   }, []);
 
