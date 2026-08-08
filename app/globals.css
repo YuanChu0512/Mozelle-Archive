@@ -7524,8 +7524,9 @@ html.is-spotlight-transitioning .spotlight-panel {
   font-size: clamp(40px, 4.15vw, 68px);
   hyphens: none;
   letter-spacing: -0.045em;
-  line-height: 1.1;
+  line-height: 1.18;
   overflow-wrap: normal;
+  padding-bottom: 0.08em;
   word-break: normal;
 }
 
@@ -7629,7 +7630,7 @@ html.is-spotlight-transitioning .spotlight-panel {
 
   .site-shell[data-language="en"] .hero h1 {
     font-size: clamp(40px, 7.4vw, 56px);
-    line-height: 1.1;
+    line-height: 1.18;
   }
 
   .site-shell[data-language="en"] .collection-card.has-media .collection-copy {
@@ -7656,7 +7657,7 @@ html.is-spotlight-transitioning .spotlight-panel {
 
   .site-shell[data-language="en"] .hero h1 {
     font-size: clamp(36px, 9.6vw, 42px);
-    line-height: 1.12;
+    line-height: 1.2;
   }
 
   .site-shell[data-language="en"] .latest-card strong {
