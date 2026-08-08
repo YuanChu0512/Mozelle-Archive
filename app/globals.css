@@ -5611,7 +5611,7 @@ html[data-motion="lite"] .magic-directional-field {
   }
 }
 
-@media (max-width: 1180px) {
+@media (max-width: 1280px) {
   .journey-rail {
     display: none;
   }
@@ -6886,7 +6886,7 @@ html.is-spotlight-transitioning .spotlight-panel {
   }
 }
 
-@media (max-width: 1180px) {
+@media (max-width: 1280px) {
   .site-header {
     grid-template-columns: 1fr auto auto;
   }
@@ -7495,5 +7495,177 @@ html.is-spotlight-transitioning .spotlight-panel {
 
   .collection-reader-story .article-section-label {
     position: static;
+  }
+}
+
+/* English copy needs a little more breathing room than the Chinese layout.
+   Keep the Chinese composition unchanged and adapt only the translated view. */
+.site-shell[data-language="en"] :is(
+  .hero h1,
+  .section-heading h2,
+  .article-body h3,
+  .lab-list h3,
+  .collection-copy h3,
+  .article-reader-hero h1,
+  .collection-reader-hero h1,
+  .article-rich-content h2,
+  .article-rich-content h3
+) {
+  hyphens: auto;
+  overflow-wrap: break-word;
+}
+
+.site-shell[data-language="en"] .hero {
+  padding-bottom: 224px;
+}
+
+.site-shell[data-language="en"] .hero h1 {
+  max-width: 760px;
+  font-size: clamp(44px, 4.65vw, 76px);
+  letter-spacing: -0.045em;
+  line-height: 1.1;
+}
+
+.site-shell[data-language="en"] .latest-card {
+  min-width: 0;
+}
+
+.site-shell[data-language="en"] .latest-card strong {
+  display: -webkit-box;
+  min-width: 0;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-height: 1.42;
+}
+
+.site-shell[data-language="en"] .article-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.site-shell[data-language="en"] .article-body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}
+
+.site-shell[data-language="en"] .article-body h3,
+.site-shell[data-language="en"] .article-body > p,
+.site-shell[data-language="en"] .lab-list h3,
+.site-shell[data-language="en"] .lab-list p,
+.site-shell[data-language="en"] .collection-copy h3,
+.site-shell[data-language="en"] .collection-copy p {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+}
+
+.site-shell[data-language="en"] .article-body h3 {
+  min-height: calc(1.4em * 3);
+  -webkit-line-clamp: 3;
+}
+
+.site-shell[data-language="en"] .article-body > p {
+  min-height: calc(1.8em * 4);
+  -webkit-line-clamp: 4;
+}
+
+.site-shell[data-language="en"] .article-footer {
+  margin-top: auto;
+}
+
+.site-shell[data-language="en"] .lab-list h3 {
+  -webkit-line-clamp: 2;
+  line-height: 1.38;
+}
+
+.site-shell[data-language="en"] .lab-list p {
+  -webkit-line-clamp: 2;
+  line-height: 1.6;
+}
+
+.site-shell[data-language="en"] .collection-copy h3 {
+  -webkit-line-clamp: 3;
+  line-height: 1.28;
+}
+
+.site-shell[data-language="en"] .collection-copy p {
+  -webkit-line-clamp: 4;
+}
+
+.site-shell[data-language="en"] :is(.article-reader-hero h1, .collection-reader-hero h1) {
+  max-width: 940px;
+  font-size: clamp(42px, 5.25vw, 76px);
+  letter-spacing: -0.05em;
+  line-height: 1.12;
+  text-wrap: balance;
+}
+
+@media (max-width: 1280px) {
+  .site-shell[data-language="en"] .collection-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .site-shell[data-language="en"] .collection-card.has-media .collection-copy {
+    right: 48%;
+  }
+}
+
+@media (max-width: 1100px) {
+  .site-shell[data-language="en"] .article-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 940px) {
+  .site-shell[data-language="en"] .hero {
+    min-height: 1100px;
+    padding-bottom: 242px;
+  }
+
+  .site-shell[data-language="en"] .hero h1 {
+    font-size: clamp(42px, 8.2vw, 60px);
+    line-height: 1.1;
+  }
+
+  .site-shell[data-language="en"] .collection-card.has-media .collection-copy {
+    right: 48%;
+  }
+}
+
+@media (max-width: 760px) {
+  .site-shell[data-language="en"] :is(.article-reader-hero h1, .collection-reader-hero h1) {
+    font-size: clamp(34px, 9.5vw, 52px);
+    line-height: 1.14;
+  }
+
+  .site-shell[data-language="en"] .collection-card.has-media .collection-copy {
+    right: 24px;
+  }
+}
+
+@media (max-width: 560px) {
+  .site-shell[data-language="en"] .hero {
+    min-height: 1160px;
+    padding-bottom: 248px;
+  }
+
+  .site-shell[data-language="en"] .hero h1 {
+    font-size: clamp(38px, 10.5vw, 46px);
+    line-height: 1.12;
+  }
+
+  .site-shell[data-language="en"] .latest-card strong {
+    -webkit-line-clamp: 3;
+  }
+
+  .site-shell[data-language="en"] .article-body h3 {
+    min-height: auto;
+  }
+
+  .site-shell[data-language="en"] .collection-copy h3 {
+    -webkit-line-clamp: 3;
+    font-size: 24px;
   }
 }
