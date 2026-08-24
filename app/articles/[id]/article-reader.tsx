@@ -19,7 +19,7 @@ import ImageLightbox, { type LightboxImage } from "../../image-lightbox";
 import { previewMediaUrl } from "../../media-utils";
 import { articleCopy, categoryLabels, localizeArticle } from "../../i18n";
 import { LanguageReassembly, useLanguageSwitcher } from "../../language-switcher";
-import { LiquidGlassLens, useLiquidGlassTracking } from "../../liquid-glass";
+import { LiquidGlassFilters, LiquidGlassLens, useLiquidGlassTracking } from "../../liquid-glass";
 import {
   ThemeTransition,
   useThemeTransition,
@@ -187,6 +187,7 @@ export default function ArticleReader({ articleId }: { articleId: string }) {
       className={`site-shell article-page-shell theme-${theme} ${transitioning ? "is-switching" : ""} ${languageSwitching ? "is-language-switching" : ""}`}
       data-language={language}
     >
+      <LiquidGlassFilters />
       <AmbientEffects />
       <LanguageReassembly active={languageSwitching} target={targetLanguage} />
       <ThemeTransition active={transitioning} target={transitionTarget} />

@@ -8,7 +8,7 @@ import AmbientEffects from "../../ambient-effects";
 import ImageLightbox, { type LightboxImage } from "../../image-lightbox";
 import { articleCopy, localizeArticle } from "../../i18n";
 import { LanguageReassembly, useLanguageSwitcher } from "../../language-switcher";
-import { LiquidGlassLens, useLiquidGlassTracking } from "../../liquid-glass";
+import { LiquidGlassFilters, LiquidGlassLens, useLiquidGlassTracking } from "../../liquid-glass";
 import { previewMediaUrl } from "../../media-utils";
 import { ThemeTransition, useThemeTransition, type Theme } from "../../theme-transition";
 
@@ -103,6 +103,7 @@ export default function CollectionReader({ collectionId }: { collectionId: strin
       className={`site-shell article-page-shell collection-page-shell theme-${theme} ${transitioning ? "is-switching" : ""} ${languageSwitching ? "is-language-switching" : ""}`}
       data-language={language}
     >
+      <LiquidGlassFilters />
       <AmbientEffects />
       <LanguageReassembly active={languageSwitching} target={targetLanguage} />
       <ThemeTransition active={transitioning} target={transitionTarget} />
