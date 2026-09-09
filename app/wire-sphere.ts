@@ -553,17 +553,19 @@ export function mountWireSphere(visual: HTMLElement, canvas: HTMLCanvasElement) 
   };
 
   const updateAnimationState = () => {
-    if (document.hidden || !inView || document.documentElement.dataset.motion === "lite") {
+    if (document.hidden || !inView || document.documentElement.dataset.motion === "lite" || visual.closest<HTMLElement>(".site-shell")?.dataset.overlayOpen === "true") {
       if (frame) window.cancelAnimationFrame(frame);
       frame = 0;
+      canvas.dataset.animationState = "paused";
     } else if (!frame) {
       nextRenderAt = 0;
+      canvas.dataset.animationState = "active";
       frame = window.requestAnimationFrame(animate);
     }
   };
   const handleVisibility = () => updateAnimationState();
   const motionObserver = new MutationObserver(updateAnimationState);
-  motionObserver.observe(document.documentElement, { attributes: true, attributeFilter: ["data-motion"] });
+  motionObserver.observe(document.documentElement, { attributes: true, subtree: true, attributeFilter: ["data-motion", "data-overlay-open"] });
 
   resizeCanvas();
   const resizeObserver = new ResizeObserver(resizeCanvas);
@@ -586,5 +588,6 @@ export function mountWireSphere(visual: HTMLElement, canvas: HTMLCanvasElement) 
     context.clearRect(0, 0, width, height);
     delete canvas.dataset.targetFps;
     delete canvas.dataset.renderCost;
+    delete canvas.dataset.animationState;
   };
 }

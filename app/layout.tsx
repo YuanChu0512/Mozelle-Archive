@@ -3,8 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import ViewTracker from "./view-tracker";
 import MotionPreferences from "./motion-preferences";
 import "./globals.css";
-import "./rhine-theme.css";
-import "./terminal.css";
+import "./glass-material.css";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",

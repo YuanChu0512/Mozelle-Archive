@@ -222,7 +222,7 @@ export function mountRhodesParticles(visual: HTMLElement, canvas: HTMLCanvasElem
       width * (compactLayout ? 0.94 : 0.44),
       height * (compactLayout ? 0.5 : 0.72),
     );
-    const centerX = width * (compactLayout ? 0.64 : 0.73);
+    const centerX = width * (compactLayout ? 0.5 : 0.27);
     const centerY = height * (compactLayout ? 0.34 : 0.365);
     const offsetX = centerX - logoSize / 2;
     const offsetY = centerY - logoSize / 2;
@@ -295,9 +295,10 @@ export function mountRhodesParticles(visual: HTMLElement, canvas: HTMLCanvasElem
     lastActivityAt = performance.now();
   };
   const updateAnimationState = () => {
-    if (document.hidden || !inView || document.documentElement.dataset.motion === "lite") {
+    if (document.hidden || !inView || document.documentElement.dataset.motion === "lite" || visual.closest<HTMLElement>(".site-shell")?.dataset.overlayOpen === "true") {
       if (frame) window.cancelAnimationFrame(frame);
       frame = 0;
+      canvas.dataset.animationState = "paused";
     } else if (!frame) {
       lastAnimationFrame = 0;
       lastRenderFrame = 0;
@@ -308,7 +309,7 @@ export function mountRhodesParticles(visual: HTMLElement, canvas: HTMLCanvasElem
   };
   const handleVisibility = () => updateAnimationState();
   const motionObserver = new MutationObserver(updateAnimationState);
-  motionObserver.observe(document.documentElement, { attributes: true, attributeFilter: ["data-motion"] });
+  motionObserver.observe(document.documentElement, { attributes: true, subtree: true, attributeFilter: ["data-motion", "data-overlay-open"] });
 
   sourceImage.onload = () => {
     if (destroyed) return;
