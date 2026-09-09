@@ -1,7 +1,7 @@
 import { fallbackArticles } from "./article-data";
 import { loadManagedPublicPosts, toCatalogArticle } from "./public-posts";
 import { localizeArticle } from "./i18n";
-import Home from "./home";
+import Home from "./terminal-home";
 
 export default async function Page() {
   const managed = await loadManagedPublicPosts();
