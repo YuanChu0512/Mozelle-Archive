@@ -14,14 +14,14 @@ export function mountTerminalScene(host: HTMLElement, initial: TerminalSceneStat
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.transmissionResolutionScale = .5;
   renderer.shadowMap.enabled = true;
-  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  renderer.shadowMap.type = THREE.PCFShadowMap;
   host.append(renderer.domElement);
   renderer.domElement.setAttribute("aria-hidden", "true");
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(30, 1, 1, 180);
   const environment = new THREE.PMREMGenerator(renderer);
   const room = new RoomEnvironment();
-  const env = environment.fromScene(room, .06);
+  const env = environment.fromScene(room, .025);
   scene.environment = env.texture;
   scene.environmentIntensity = .55;
   room.dispose(); environment.dispose();
