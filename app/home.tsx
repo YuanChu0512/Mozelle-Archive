@@ -110,6 +110,11 @@ function DimensionScrollScene({
 export default function Home({ initialArticles, managed }: { initialArticles: Article[]; managed: boolean }) {
   const [theme, setTheme] = useState<Theme>("day");
   const [archiveCategory, setArchiveCategory] = useState<ArchiveCategory>("article");
+  const changeArchiveCategory = useCallback((category: ArchiveCategory) => {
+    setArchiveCategory(category);
+    const hash = { article: "#articles", lab: "#lab", collection: "#collection" }[category];
+    window.history.replaceState(window.history.state, "", hash);
+  }, []);
   const archiveRestored = useRef(false);
   useEffect(() => {
     let active = true;
@@ -684,10 +689,21 @@ export default function Home({ initialArticles, managed }: { initialArticles: Ar
     event.preventDefault();
     setMenuOpen(false);
     const reducedMotion = document.documentElement.dataset.motion === "lite";
+    const isArchiveTarget = ["articles", "lab", "collection"].includes(targetId);
+    const workspace = document.querySelector<HTMLElement>(".archive-workspace");
+    if (isArchiveTarget && workspace) {
+      const bounds = workspace.getBoundingClientRect();
+      // Switching a category in an already visible workbench does not start
+      // another page-scroll or full-screen overlay animation.
+      if (bounds.top < window.innerHeight * .4 && bounds.bottom > 200) {
+        window.history.replaceState(window.history.state, "", href);
+        return;
+      }
+    }
     const liteMotion =
       reducedMotion || document.documentElement.dataset.motion === "lite";
 
-    if (!liteMotion) {
+    if (!liteMotion && !isArchiveTarget) {
       if (sectionJumpTimer.current) {
         window.clearTimeout(sectionJumpTimer.current);
       }
@@ -1299,7 +1315,7 @@ export default function Home({ initialArticles, managed }: { initialArticles: Ar
         articles={articles}
         language={language}
         category={archiveCategory}
-        onCategory={setArchiveCategory}
+        onCategory={changeArchiveCategory}
         onPreview={(article) => setPreview({ images: articlePreviewImages(article), activeIndex: 0 })}
       />
 
