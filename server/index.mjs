@@ -25,6 +25,7 @@ import {
   normalizeVisitorIp,
 } from "./analytics.mjs";
 import { sanitizeImageMetadata } from "./image-sanitizer.mjs";
+import { registerPublicCatalog } from "./public-catalog.mjs";
 import {
   buildAutomaticEnglish,
   createLibreTranslateClient,
@@ -903,6 +904,8 @@ app.post(
     return reply.code(204).send();
   },
 );
+
+registerPublicCatalog(app, pool, mapPublicPost);
 
 app.get("/api/posts", async (_request, reply) => {
   const { rows } = await pool.query(

@@ -52,6 +52,8 @@ export function useThemeTransition(
 
   const toggleTheme = (event: MouseEvent<HTMLButtonElement>) => {
     if (transitioning) return;
+    timers.current.forEach((timer) => window.clearTimeout(timer));
+    timers.current.length = 0;
 
     const nextTheme: Theme = theme === "day" ? "night" : "day";
     const root = document.documentElement;
@@ -76,6 +78,7 @@ export function useThemeTransition(
     }, switchDelay));
     timers.current.push(window.setTimeout(() => {
       setTransitioning(false);
+      timers.current.length = 0;
       delete root.dataset.switching;
     }, totalDuration));
   };

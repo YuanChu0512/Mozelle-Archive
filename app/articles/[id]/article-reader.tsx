@@ -19,7 +19,7 @@ import ImageLightbox, { type LightboxImage } from "../../image-lightbox";
 import { previewMediaUrl } from "../../media-utils";
 import { articleCopy, categoryLabels, localizeArticle } from "../../i18n";
 import { LanguageReassembly, useLanguageSwitcher } from "../../language-switcher";
-import { LiquidGlassFilters, LiquidGlassLens, useLiquidGlassTracking } from "../../liquid-glass";
+import { LiquidGlassLens, useLiquidGlassTracking } from "../../liquid-glass";
 import {
   ThemeTransition,
   useThemeTransition,
@@ -143,16 +143,17 @@ export default function ArticleReader({ articleId }: { articleId: string }) {
 
   useEffect(() => {
     const controller = new AbortController();
-    fetch("/api/posts", {
+    fetch(`/api/posts/${encodeURIComponent(articleId)}`, {
       headers: { accept: "application/json" },
       signal: controller.signal,
     })
       .then((response) => {
+        if (response.status === 404 && response.headers.get("content-type")?.includes("application/json")) return { post: null };
         if (!response.ok) throw new Error("文章服务暂不可用");
-        return response.json() as Promise<{ posts?: CompatibleArticle[] }>;
+        return response.json() as Promise<{ post?: CompatibleArticle | null }>;
       })
       .then((payload) => {
-        const matched = payload.posts?.find((item) => matchesArticleRoute(item, articleId)) ?? null;
+        const matched = payload.post ?? null;
         if (matched) {
           setArticle(normalizeArticle(matched));
           setStatus("ready");
@@ -187,7 +188,6 @@ export default function ArticleReader({ articleId }: { articleId: string }) {
       className={`site-shell article-page-shell theme-${theme} ${transitioning ? "is-switching" : ""} ${languageSwitching ? "is-language-switching" : ""}`}
       data-language={language}
     >
-      <LiquidGlassFilters />
       <AmbientEffects />
       <LanguageReassembly active={languageSwitching} target={targetLanguage} />
       <ThemeTransition active={transitioning} target={transitionTarget} />
