@@ -33,7 +33,7 @@ test("public detail uses parameterized published-only lookup and caches a saved 
     assert.equal(first.statusCode, 200);
     assert.equal((await app.inject("/api/posts/test-record")).statusCode, 200);
     assert.equal(renderCount, 1);
-    assert.deepEqual(calls[0].values, ["test-record", null]);
+    assert.deepEqual(calls[0].values, ["test-record"]);
     assert.match(calls[0].sql, /published_at <= NOW\(\)/);
     assert.match(calls[0].sql, /slug = \$1/);
     assert.equal((await app.inject("/api/posts/missing")).statusCode, 404);

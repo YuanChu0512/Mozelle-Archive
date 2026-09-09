@@ -1,5 +1,4 @@
 const publishedOnly = "status IN ('published', 'scheduled') AND published_at IS NOT NULL AND published_at <= NOW()";
-const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 export function mapCatalogEntry(row) {
   const en = row.translations?.en;
@@ -38,8 +37,8 @@ export function registerPublicCatalog(app, pool, renderPost) {
     const id = request.params.id;
     if (id.length > 240) return reply.code(400).send({ error: "Invalid record identifier" });
     const { rows } = await pool.query(
-      `SELECT * FROM posts WHERE ${publishedOnly} AND (slug = $1 OR id = $2::uuid) LIMIT 1`,
-      [id, uuid.test(id) ? id : null],
+      `SELECT * FROM posts WHERE ${publishedOnly} AND (slug = $1 OR id = $1) LIMIT 1`,
+      [id],
     );
     if (!rows[0]) return reply.code(404).send({ error: "Record not found" });
     const row = rows[0];
